@@ -8,5 +8,13 @@ namespace TextAdventure
 {
     internal class Item
     {
+        public string Id { get; }
+        public string Description { get; }
+
+        public Item(string id, string description)
+        {
+            Id = id;
+            Description = description;
+        }
     }
 }
