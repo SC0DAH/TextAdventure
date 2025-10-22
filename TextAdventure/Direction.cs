@@ -8,6 +8,6 @@ namespace TextAdventure
 {
     internal enum Direction
     {
-        left, right, up, down
+        Left, Right, Up, Down
     }
 }
