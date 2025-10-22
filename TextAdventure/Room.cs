@@ -13,7 +13,9 @@ namespace TextAdventure
         public bool IsDeadly { get; set; }
         public bool RequiresKey { get; set; }
         public bool HasMonster { get; set; }
-        public List<Item> Items { get; } = new List<Item>();
+        public List<Item> Items { get; } = new();
+
+        public Dictionary<string, Room> Exits { get; } = new();
 
         public Room(string name, string description)
         {
