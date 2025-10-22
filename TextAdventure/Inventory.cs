@@ -14,5 +14,14 @@ namespace TextAdventure
         {
             Items.Add(item);
         }
+        public bool HasItem(string id)
+        {
+            return Items.Any(i => i.Id == id);
+        }
+
+        public override string ToString()
+        {
+            return Items.Count == 0 ? "Your inventory is empty." : "Your inventory contains: " + string.Join(", ", Items.Select(i => i.Id));
+        }
     }
 }
