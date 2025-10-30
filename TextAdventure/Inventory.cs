@@ -10,13 +10,36 @@ namespace TextAdventure
     {
         private List<Item> Items { get; set; } = new List<Item>();
 
+        // Voeg een item toe aan de inventaris
         public void AddItem(Item item)
         {
-            Items.Add(item);
+            if (Items.Any(i => i.Id == item.Id))
+            {
+                Console.WriteLine($"You already have the {item.Description}.");
+            }
+            else
+            {
+                Items.Add(item);
+                Console.WriteLine($"You picked up the {item.Description}.");
+            }
         }
         public bool HasItem(string id)
         {
             return Items.Any(i => i.Id == id);
+        }
+        // Verwijder een item uit de inventaris
+        public void RemoveItem(string id)
+        {
+            var item = Items.FirstOrDefault(i => i.Id == id);
+            if (item != null)
+            {
+                Items.Remove(item);
+                Console.WriteLine($"You used the {item.Description}.");
+            }
+            else
+            {
+                Console.WriteLine("You don't have that item.");
+            }
         }
 
         public override string ToString()
