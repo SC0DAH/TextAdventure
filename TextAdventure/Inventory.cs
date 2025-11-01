@@ -15,12 +15,12 @@ namespace TextAdventure
         {
             if (Items.Any(i => i.Id == item.Id))
             {
-                Console.WriteLine($"You already have the {item.Description}.");
+                Console.WriteLine($"You already have {item.Description}.");
             }
             else
             {
                 Items.Add(item);
-                Console.WriteLine($"You picked up the {item.Description}.");
+                Console.WriteLine($"You picked up {item.Description}.");
             }
         }
         public bool HasItem(string id)

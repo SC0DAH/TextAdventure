@@ -7,7 +7,7 @@
             Console.WriteLine("Welcome to the Adventure Game!");
             Console.WriteLine("Type 'help' to see available commands.");
 
-            // Создаём игру
+            // Setting up the game
             var world = GameSetup.CreateGame();
             var inventory = new Inventory();
 
@@ -108,7 +108,7 @@
 
             var nextRoom = room.Exits[dir];
 
-            // Проверка на смертельную комнату
+            // Checking if room is deadly
             if (nextRoom.IsDeadly)
             {
                 Console.WriteLine(nextRoom.Description);
@@ -117,30 +117,32 @@
                 return;
             }
 
-            // Проверка на дверь с ключом
-            if (nextRoom.RequiresKey && !inventory.HasItem("key"))
+            // checking if room requires a key and if the player has key
+            if (nextRoom.RequiresKey)
             {
-                Console.WriteLine("The door is locked. You need a key!");
+                if (inventory.HasItem("key"))
+                {
+                    Console.WriteLine("You unlock the door with your key and step through...");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Congratulations, you win!");
+                    Console.ResetColor();
+                    running = false;
+                }
+                else
+                {
+                    Console.WriteLine("The door is locked. You need a key!");
+                }
                 return;
             }
 
-            // Проверка на победу (если дверь требует ключ, и он есть)
-            if (nextRoom.RequiresKey && inventory.HasItem("key"))
-            {
-                Console.WriteLine("You unlock the door with your key and step through...");
-                Console.WriteLine("🏆 Congratulations, you win!");
-                running = false;
-                return;
-            }
-
-            // Проверка на монстра
+            // checking if room has monster
             if (nextRoom.HasMonster)
             {
                 Console.WriteLine("A monster jumps at you!");
                 Console.WriteLine("You can 'fight' or try to go back...");
             }
 
-            // Если идём из монстр-комнаты и монстр жив
+            // if player leaves without killing monster he dies
             if (room.HasMonster)
             {
                 Console.WriteLine("You try to leave while the monster is alive...");
