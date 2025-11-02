@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace UnitTests
+namespace BehaviorDrivenTesting
 {
     using TechTalk.SpecFlow;
     using System;
@@ -104,7 +104,7 @@ namespace UnitTests
   this.FeatureBackground();
 #line hidden
 #line 10
-    testRunner.Given("the player is in the Start Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the player is in the Start-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 11
     testRunner.When("the player goes \"right\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -143,7 +143,7 @@ namespace UnitTests
   this.FeatureBackground();
 #line hidden
 #line 17
-    testRunner.Given("the player is in the Start Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the player is in the Start-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 18
     testRunner.When("the player goes \"left\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -176,7 +176,7 @@ namespace UnitTests
   this.FeatureBackground();
 #line hidden
 #line 22
-    testRunner.Given("the player is in the Sword Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the player is in the Sword-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 23
     testRunner.And("the player takes \"sword\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -215,7 +215,7 @@ namespace UnitTests
   this.FeatureBackground();
 #line hidden
 #line 29
-    testRunner.Given("the player is in the Sword Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the player is in the Sword-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 30
     testRunner.And("the player takes \"sword\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -257,7 +257,7 @@ namespace UnitTests
   this.FeatureBackground();
 #line hidden
 #line 37
-    testRunner.Given("the player is in the Start Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the player is in the Start-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 38
     testRunner.When("the player goes \"up\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");

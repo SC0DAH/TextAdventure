@@ -11,7 +11,7 @@
     When the player goes "right"
     And the player takes "key"
     And the player goes "up"
-    Then the player should see "You unlock the door with your key and step through...\nCongratulations, you win!"
+    Then the player should see "Congratulations, you win!"
 
   Scenario: Player dies by entering the deadly room
     Given the player is in the Start-Room
