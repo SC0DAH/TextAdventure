@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    internal class Rooms
+    public class Rooms
     {
         public Room CurrentRoom { get; private set; }
         public Rooms(Room startRoom)

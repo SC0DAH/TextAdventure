@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    internal enum Direction
+    public enum Direction
     {
         Left, Right, Up, Down, Back
     }

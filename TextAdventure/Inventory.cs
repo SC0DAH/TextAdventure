@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    internal class Inventory
+    public class Inventory
     {
         private List<Item> Items { get; set; } = new List<Item>();
 
