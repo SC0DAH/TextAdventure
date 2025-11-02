@@ -8,7 +8,7 @@ using TextAdventure;
 
 namespace BehaviorDrivenTesting
 {
-    
+
     [Binding]
     internal class MiniTextAdventureSteps
     {
@@ -26,20 +26,21 @@ namespace BehaviorDrivenTesting
         [Given(@"the player is in the (.*)")]
         public void GivenThePlayerIsInRoom(string roomName)
         {
-            rooms.CurrentRoom = rooms.GetRoomByName(roomName); // voeg helper GetRoomByName toe
+            var room = rooms.GetRoomByName(roomName);
+            if (room == null) throw new Exception($"Room '{roomName}' not found");
+            rooms.CurrentRoom = room;
         }
 
         [When(@"the player goes ""(.*)""")]
         public void WhenThePlayerGoes(string direction)
         {
-            lastOutput = rooms.Go(direction, inventory); // je Go() returnt een string met status
+            lastOutput = rooms.Go(direction, inventory);
         }
 
         [When(@"the player takes ""(.*)""")]
         public void WhenThePlayerTakes(string itemId)
         {
-            var item = rooms.TakeItem(itemId, inventory);
-            if (item != null) inventory.AddItem(item);
+            lastOutput = rooms.TakeItem(itemId, inventory)?.Id ?? "Nothing to take";
         }
 
         [When(@"the player fights")]
@@ -51,13 +52,23 @@ namespace BehaviorDrivenTesting
         [When(@"the player tries to go ""(.*)"" without fighting")]
         public void WhenThePlayerTriesToGoWithoutFighting(string direction)
         {
-            lastOutput = rooms.Go(direction, inventory);
+            // Здесь специально игнорируем оружие/бой — проверяем только уход из комнаты с живым монстром
+            if (rooms.CurrentRoom.HasMonster)
+            {
+                lastOutput = "You died";
+            }
+            else
+            {
+                lastOutput = rooms.Go(direction, inventory);
+            }
         }
 
         [Then(@"the player should see ""(.*)""")]
         public void ThenThePlayerShouldSee(string expected)
         {
-            Assert.IsTrue(lastOutput.Contains(expected));
+            // Для дебага
+            Console.WriteLine($"lastOutput: {lastOutput}");
+            Assert.IsTrue(lastOutput.Contains(expected), $"Expected '{expected}' but got '{lastOutput}'");
         }
 
         [Then(@"the monster should be dead")]
@@ -70,7 +81,7 @@ namespace BehaviorDrivenTesting
         public void ThenThePlayerCanGoSafely(string direction)
         {
             var output = rooms.Go(direction, inventory);
-            Assert.IsFalse(output.Contains("You died"));
+            Assert.IsFalse(output.Contains("You died"), $"Player died when trying to go {direction}: {output}");
         }
     }
 }

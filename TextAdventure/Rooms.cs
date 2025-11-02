@@ -19,7 +19,6 @@ namespace TextAdventure
 
         public Room GetRoomByName(string name) => AllRooms.FirstOrDefault(r => r.Name == name);
 
-        // Бой с монстром
         public string Fight(Inventory inventory)
         {
             if (!CurrentRoom.HasMonster)
