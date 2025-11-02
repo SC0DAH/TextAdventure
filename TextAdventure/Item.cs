@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    internal class Item
+    public class Item
     {
-        public string Id { get; }
-        public string Description { get; }
+        public string Id { get; private set; }
+        public string Description { get; private set; }
 
         public Item(string id, string description)
         {
