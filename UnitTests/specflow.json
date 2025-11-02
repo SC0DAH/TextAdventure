@@ -1,0 +1,13 @@
+﻿{
+  "specFlow": {
+    "bindingCulture": {
+      "name": "en-US"
+    },
+    "language": {
+      "feature": "en"
+    },
+    "unitTestProvider": {
+      "name": "NUnit"
+    }
+  }
+}

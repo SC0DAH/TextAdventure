@@ -27,7 +27,7 @@ namespace UnitTests
             var item = new Item("key", "Golden key");
             inventory.AddItem(item);
 
-            // Act — добавляем повторно
+            // Act
             inventory.AddItem(item);
 
             // Assert

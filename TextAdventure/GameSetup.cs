@@ -19,12 +19,17 @@ namespace TextAdventure
             var swordRoom = new Room("Sword-Room", "A room that has a sharp sword laying around!");
             var monsterRoom = new Room("Monster-Room", "The room that is haunted by a devious monster!") { HasMonster = true };
 
-            // Rooms met items => items geven
+            // Rooms met items
             var key = new Item("key", "A shiny golden key");
             var sword = new Item("sword", "A sharp sword ready for action");
-
             keyRoom.Items.Add(key);
             swordRoom.Items.Add(sword);
+
+            // Rooms manager aanmaken
+            var roomsManager = new Rooms(startRoom);
+
+            // Voeg alle kamers toe aan AllRooms
+            roomsManager.AllRooms.AddRange(new[] { startRoom, keyRoom, deadlyRoom, doorRoom, swordRoom, monsterRoom });
 
             // Exits instellen van start room
             startRoom.Exits.Add("left", deadlyRoom);
@@ -37,8 +42,8 @@ namespace TextAdventure
             swordRoom.Exits.Add("up", startRoom);
             swordRoom.Exits.Add("down", monsterRoom);
             monsterRoom.Exits.Add("up", swordRoom);
-            // we zetten currentroom als startRoom
-            return new Rooms(startRoom);
+
+            return roomsManager;
         }
     }
 }
