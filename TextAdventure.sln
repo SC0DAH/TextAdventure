@@ -5,8 +5,6 @@ VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextAdventure", "TextAdventure\TextAdventure.csproj", "{774EFD91-660D-4107-B176-3EBB619C4538}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTextAdventure", "TestTextAdventure\TestTextAdventure.csproj", "{E3C59BE3-CE8A-4AB9-94A4-4EFFF43CD51F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{1DB8764E-5AD3-42B9-B022-DA27F94B699E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BehaviorDrivenTesting", "BehaviorDrivenTesting\BehaviorDrivenTesting.csproj", "{6E872A43-BB27-4F74-989F-0993450969A9}"
@@ -21,10 +19,6 @@ Global
 		{774EFD91-660D-4107-B176-3EBB619C4538}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{774EFD91-660D-4107-B176-3EBB619C4538}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{774EFD91-660D-4107-B176-3EBB619C4538}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3C59BE3-CE8A-4AB9-94A4-4EFFF43CD51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3C59BE3-CE8A-4AB9-94A4-4EFFF43CD51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3C59BE3-CE8A-4AB9-94A4-4EFFF43CD51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3C59BE3-CE8A-4AB9-94A4-4EFFF43CD51F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1DB8764E-5AD3-42B9-B022-DA27F94B699E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1DB8764E-5AD3-42B9-B022-DA27F94B699E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DB8764E-5AD3-42B9-B022-DA27F94B699E}.Release|Any CPU.ActiveCfg = Release|Any CPU
