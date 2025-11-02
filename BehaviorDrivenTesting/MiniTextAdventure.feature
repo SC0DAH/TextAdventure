@@ -10,6 +10,7 @@
     Given the player is in the Start-Room
     When the player goes "right"
     And the player takes "key"
+    And the player goes "left"
     And the player goes "up"
     Then the player should see "Congratulations, you win!"
 

@@ -113,9 +113,12 @@ namespace BehaviorDrivenTesting
     testRunner.And("the player takes \"key\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
-    testRunner.And("the player goes \"up\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("the player goes \"left\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
+    testRunner.And("the player goes \"up\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 15
     testRunner.Then("the player should see \"Congratulations, you win!\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -129,7 +132,7 @@ namespace BehaviorDrivenTesting
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player dies by entering the deadly room", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 16
+#line 17
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -142,13 +145,13 @@ namespace BehaviorDrivenTesting
 #line 6
   this.FeatureBackground();
 #line hidden
-#line 17
+#line 18
     testRunner.Given("the player is in the Start-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 18
+#line 19
     testRunner.When("the player goes \"left\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 19
+#line 20
     testRunner.Then("the player should see \"Game Over\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -162,7 +165,7 @@ namespace BehaviorDrivenTesting
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player dies by trying to leave monster room alive", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 21
+#line 22
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -175,19 +178,19 @@ namespace BehaviorDrivenTesting
 #line 6
   this.FeatureBackground();
 #line hidden
-#line 22
+#line 23
     testRunner.Given("the player is in the Sword-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 23
+#line 24
     testRunner.And("the player takes \"sword\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 24
+#line 25
     testRunner.And("the player goes \"down\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 25
+#line 26
     testRunner.When("the player tries to go \"up\" without fighting", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 26
+#line 27
     testRunner.Then("the player should see \"You died\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -201,7 +204,7 @@ namespace BehaviorDrivenTesting
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player fights and defeats the monster safely", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 28
+#line 29
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -214,22 +217,22 @@ namespace BehaviorDrivenTesting
 #line 6
   this.FeatureBackground();
 #line hidden
-#line 29
+#line 30
     testRunner.Given("the player is in the Sword-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 30
+#line 31
     testRunner.And("the player takes \"sword\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 31
+#line 32
     testRunner.And("the player goes \"down\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 32
+#line 33
     testRunner.When("the player fights", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 33
+#line 34
     testRunner.Then("the monster should be dead", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 34
+#line 35
     testRunner.And("the player can go \"up\" safely", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -243,7 +246,7 @@ namespace BehaviorDrivenTesting
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player tries to go through locked door without key", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 36
+#line 37
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -256,13 +259,13 @@ namespace BehaviorDrivenTesting
 #line 6
   this.FeatureBackground();
 #line hidden
-#line 37
+#line 38
     testRunner.Given("the player is in the Start-Room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 38
+#line 39
     testRunner.When("the player goes \"up\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 39
+#line 40
     testRunner.Then("the player should see \"The door is locked. You need a key!\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
