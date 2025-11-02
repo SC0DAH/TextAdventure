@@ -7,7 +7,9 @@ namespace TestTextAdventure
     /// Unit tests voor de Room class
     /// Hier test ik of Room correct werkt
 
-    [TestClass]  // ← Dit attribuut zegt: "Dit is een test class"
+    [TestClass]
+    [TestCategory("Room")]
+
     public class RoomTests
     {
         // TEST 1: Checkt of de constructor (new Room(...)) werkt
@@ -15,22 +17,21 @@ namespace TestTextAdventure
         public void Room_Constructor_ShouldSetNameAndDescription()
         {
             var name = "Start Room";
-            var description = "The beginning of your adventure";
+            var description = "You are at the very beginning of your adventure!";
 
             var room = new Room(name, description);
 
             Assert.AreEqual("Start Room", room.Name);
-            Assert.AreEqual("The beginning of your adventure", room.Description);
+            Assert.AreEqual("You are at the very beginning of your adventure!", room.Description);
         }
 
         // TEST 2: Checkt of Items lijst leeg start
         [TestMethod]
         public void Room_Items_ShouldBeEmptyAtStart()
         {
-            // ARRANGE & ACT
             var room = new Room("Test Room", "A test room");
 
-            // ASSERT - Check dat Items lijst bestaat EN leeg is
+            // Check dat Items lijst bestaat EN leeg is
             Assert.IsNotNull(room.Items);  // Lijst bestaat
             Assert.AreEqual(0, room.Items.Count);  // Lijst heeft 0 items
         }
@@ -41,14 +42,14 @@ namespace TestTextAdventure
         {
             // ARRANGE
             var room = new Room("Treasure Room", "Full of treasure");
-            var item = new Item("gold", "Gold coins");
+            var item = new Item("key", "A sharp sword ready for action");
 
             // ACT - Voeg item toe
             room.Items.Add(item);
 
             // Chec k dat item is togevoegd
             Assert.AreEqual(1, room.Items.Count);
-            Assert.AreEqual("gold", room.Items[0].Id);
+            Assert.AreEqual("key", room.Items[0].Id);
 
             room.Items.Remove(item);
 
