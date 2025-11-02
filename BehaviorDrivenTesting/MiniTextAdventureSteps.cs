@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using TextAdventure;
 
-namespace UnitTests
+namespace BehaviorDrivenTesting
 {
-    [TestClass]
+    
     [Binding]
     internal class MiniTextAdventureSteps
     {

@@ -7,26 +7,26 @@
     Given the game is started
 
   Scenario: Player wins by collecting the key and opening the door
-    Given the player is in the Start Room
+    Given the player is in the Start-Room
     When the player goes "right"
     And the player takes "key"
     And the player goes "up"
-    Then the player should see "Congratulations, you win!"
+    Then the player should see "You unlock the door with your key and step through...\nCongratulations, you win!"
 
   Scenario: Player dies by entering the deadly room
-    Given the player is in the Start Room
+    Given the player is in the Start-Room
     When the player goes "left"
     Then the player should see "Game Over"
 
   Scenario: Player dies by trying to leave monster room alive
-    Given the player is in the Sword Room
+    Given the player is in the Sword-Room
     And the player takes "sword"
     And the player goes "down"
     When the player tries to go "up" without fighting
     Then the player should see "You died"
 
   Scenario: Player fights and defeats the monster safely
-    Given the player is in the Sword Room
+    Given the player is in the Sword-Room
     And the player takes "sword"
     And the player goes "down"
     When the player fights
@@ -34,6 +34,6 @@
     And the player can go "up" safely
 
   Scenario: Player tries to go through locked door without key
-    Given the player is in the Start Room
+    Given the player is in the Start-Room
     When the player goes "up"
     Then the player should see "The door is locked. You need a key!"
