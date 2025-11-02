@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    internal class GameSetup
+    public class GameSetup
     {
         // Methode om game te initialiseren
         public static Rooms CreateGame()
