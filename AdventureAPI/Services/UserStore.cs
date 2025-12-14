@@ -14,5 +14,7 @@ namespace AdventureAPI.Services
         public string Salt { get; set; }
         public int FailedAttempts { get; set; }
         public DateTime? LockoutEnd { get; set; }
+        public string Role { get; set; } = "Player";
     }
+
 }
