@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\Unit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BehaviorDrivenTesting", "BehaviorDrivenTesting\BehaviorDrivenTesting.csproj", "{6E872A43-BB27-4F74-989F-0993450969A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextAdventure.Test.Integration", "TextAdventure.Test.Integration\TextAdventure.Test.Integration.csproj", "{24767D3B-0C5E-4426-A23D-CBE6BBAC5B31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextAdventure.Test.Integration", "TextAdventure.Test.Integration\TextAdventure.Test.Integration.csproj", "{24767D3B-0C5E-4426-A23D-CBE6BBAC5B31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureAPI", "AdventureAPI\AdventureAPI.csproj", "{35002E94-6AFA-4A1B-AF26-38A447D256C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureAPI", "AdventureAPI\AdventureAPI.csproj", "{35002E94-6AFA-4A1B-AF26-38A447D256C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomEncryptor", "RoomEncryptor\RoomEncryptor.csproj", "{6996E382-449E-4EBC-81AA-C9D1BC5790C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{35002E94-6AFA-4A1B-AF26-38A447D256C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35002E94-6AFA-4A1B-AF26-38A447D256C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35002E94-6AFA-4A1B-AF26-38A447D256C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6996E382-449E-4EBC-81AA-C9D1BC5790C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6996E382-449E-4EBC-81AA-C9D1BC5790C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6996E382-449E-4EBC-81AA-C9D1BC5790C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6996E382-449E-4EBC-81AA-C9D1BC5790C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
