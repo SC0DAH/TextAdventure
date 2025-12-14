@@ -10,13 +10,13 @@ public class AuthClient
     public string? Token => _token;
     public bool IsLoggedIn => !string.IsNullOrEmpty(_token);
 
-    public AuthClient(string baseUrl = "http://localhost:5064") // порт сервера
+    public AuthClient(string baseUrl = "http://localhost:5064") // server port http
     {
         _client = new HttpClient();
         _client.BaseAddress = new Uri(baseUrl);
     }
 
-    // Регистрация
+    // registration
     public async Task<bool> RegisterAsync(string username, string password)
     {
         try
@@ -31,7 +31,7 @@ public class AuthClient
         }
     }
 
-    // Логин
+    // login
     public async Task<bool> LoginAsync(string username, string password)
     {
         try
@@ -52,7 +52,7 @@ public class AuthClient
         }
     }
 
-    // Получение keyshare
+    // getting keyshare
     public async Task<string?> GetKeyShareAsync()
     {
         if (_token == null)
