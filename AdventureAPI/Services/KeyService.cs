@@ -7,23 +7,31 @@ namespace AdventureAPI.Services
 {
     public class KeyService
     {
-        private readonly ConcurrentDictionary<string, byte[]> _userKeys = new(); // bewaart per gebruiker de keyshare in memory
-        private const int KeyLength = 32; // lengte van key
+        // bewaart per roomId een dictionary van username → key
+        private readonly ConcurrentDictionary<string, ConcurrentDictionary<string, byte[]>> _roomKeys = new();
+        private const int KeyLength = 32;
 
-        public string GetOrCreateKeyForUser(string username)
+        public string GetOrCreateKeyForUser(string roomId, string username)
         {
+            if (string.IsNullOrEmpty(roomId))
+                throw new ArgumentException("roomId required");
+
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentException("username required");
 
-            if (_userKeys.TryGetValue(username, out var existingKey))
-                return Convert.ToBase64String(existingKey); // als gebruiker al key heeft geven we die terug
+            // haal of maak dictionary voor room
+            var userKeys = _roomKeys.GetOrAdd(roomId, _ => new ConcurrentDictionary<string, byte[]>());
 
-            // maken nieuwe key
+            // check of user al key heeft
+            if (userKeys.TryGetValue(username, out var existingKey))
+                return Convert.ToBase64String(existingKey);
+
+            // anders maak nieuwe key
             var keyBytes = new byte[KeyLength];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(keyBytes);
 
-            _userKeys[username] = keyBytes;
+            userKeys[username] = keyBytes;
             return Convert.ToBase64String(keyBytes);
         }
     }

@@ -10,12 +10,16 @@ namespace AdventureAPI
         private readonly string _key;
         public JwtService(string key) => _key = key;
 
-        public string GenerateToken(string username, int expireHours = 1)
+        public string GenerateToken(string username, string role, int expireHours = 1)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key)); // symmetrische sleutel = gebruikt voor signeren en verifieren
             var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256); // ondertekeningsmethode
 
-            var claims = new[] {new Claim("user", username)}; // info die in token opgslagen wordt
+            var claims = new[]
+            {
+                new Claim("user", username),
+                new Claim("role", role)
+            }; // info die in token opgslagen wordt
 
             var token = new JwtSecurityToken( // jwt token maken met claims, vervaldatum en ondertekingen met key
                 claims: claims,

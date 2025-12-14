@@ -58,7 +58,7 @@ namespace AdventureAPI
             app.UseAuthorization();
 
             // /register, registreerd gebruiker
-            app.MapPost("/register", (RegisterRequest req, UserStore store) =>
+            app.MapPost("/auth/register", (RegisterRequest req, UserStore store) =>
             {
                 try
                 {
@@ -70,26 +70,31 @@ namespace AdventureAPI
                     if (store.Users.ContainsKey(username))
                         return Results.BadRequest(new { error = "user already exists" });
 
+                    // salt + hash
                     var salt = PasswordHasher.GenerateSalt();
-                    var hashed = PasswordHasher.HashWithSalt(req.Password, salt);
+                    var hashedPassword = PasswordHasher.HashWithSalt(req.Password, salt);
+
+                    var role = req.Role?.Trim() == "Admin" ? "Admin" : "Player";
 
                     store.Users[username] = new UserRecord
                     {
                         Username = username,
-                        PasswordHash = hashed,
-                        Salt = salt
+                        PasswordHash = hashedPassword,
+                        Salt = salt,
+                        Role = role
                     };
 
-                    return Results.Ok(new { message = "registered" });
+                    return Results.Ok(new { message = "registered", role });
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return Results.StatusCode(500);
+                    return Results.Problem(ex.Message);
                 }
             });
 
+
             // /login, returned jwt token bij succes, lockout na 5 gefaalde pogingen
-            app.MapPost("/login", (LoginRequest req, UserStore store, JwtService jwt) =>
+            app.MapPost("/auth/login", (LoginRequest req, UserStore store, JwtService jwt) =>
             {
                 try
                 {
@@ -98,61 +103,102 @@ namespace AdventureAPI
 
                     var username = req.Username.Trim();
 
+                    // bestaat user?
                     if (!store.Users.TryGetValue(username, out var user))
                         return Results.BadRequest(new { error = "invalid credentials" });
 
+                    // checken op lockout
                     if (user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow)
                     {
                         var remaining = (int)(user.LockoutEnd.Value - DateTime.UtcNow).TotalSeconds;
                         return Results.BadRequest(new { error = "account locked", retry_seconds = remaining });
                     }
 
+                    // hash vergelijken
                     var providedHash = PasswordHasher.HashWithSalt(req.Password, user.Salt);
                     if (!PasswordHasher.SlowEquals(providedHash, user.PasswordHash))
                     {
                         user.FailedAttempts++;
-                        if (user.FailedAttempts >= 5)
+
+                        // lockout
+                        if (user.FailedAttempts >= 3)
                         {
-                            user.LockoutEnd = DateTime.UtcNow.AddSeconds(30);
+                            user.LockoutEnd = DateTime.UtcNow.AddSeconds(30); // 30 sec
                             user.FailedAttempts = 0;
                             return Results.BadRequest(new { error = "account locked due to failed attempts", retry_seconds = 30 });
                         }
 
-                        return Results.BadRequest(new { error = "invalid credentials", attempts_left = 5 - user.FailedAttempts });
+                        return Results.BadRequest(new { error = "invalid credentials", attempts_left = 3 - user.FailedAttempts });
                     }
 
                     user.FailedAttempts = 0;
                     user.LockoutEnd = null;
 
-                    var token = jwt.GenerateToken(username);
+                    var token = jwt.GenerateToken(username, user.Role);
 
-                    return Results.Ok(new { token });
+                    return Results.Ok(new
+                    {
+                        token,
+                        username = user.Username,
+                        role = user.Role
+                    });
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return Results.StatusCode(500);
+                    return Results.Problem(ex.Message);
                 }
             });
 
+            app.MapGet("/auth/me", (HttpContext ctx) =>
+            {
+                // check of de user geauthenticeerd is
+                if (!ctx.User.Identity?.IsAuthenticated ?? true)
+                    return Results.Unauthorized();
+
+                var username = ctx.User.FindFirst("user")?.Value;
+                var role = ctx.User.FindFirst("role")?.Value;
+
+                if (username == null || role == null)
+                    return Results.Unauthorized();
+
+                return Results.Ok(new
+                {
+                    username,
+                    role
+                });
+            }).RequireAuthorization();
+
             // /keyshare, genereerd Base64 encoded unieke 32-byte key
-            app.MapGet("/keyshare", (HttpContext ctx, KeyService keyService) =>
+            app.MapGet("/api/keys/keyshare/{roomId}", (string roomId, HttpContext ctx, KeyService keyService) =>
             {
                 try
                 {
                     var username = ctx.User?.FindFirst("user")?.Value;
-                    if (string.IsNullOrEmpty(username))
+                    var role = ctx.User?.FindFirst("role")?.Value;
+
+                    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(role))
                         return Results.Unauthorized();
 
-                    // Haal echte keyshare
-                    var keyshare = keyService.GetOrCreateKeyForUser(username);
-                    return Results.Ok(new { keyshare });
+                    // check permissie
+                    if (role != "Player" && role != "Admin")
+                        return Results.Forbid();
+
+                    // key ophalen of aanmaken per room
+                    var keyshare = keyService.GetOrCreateKeyForUser(roomId, username);
+
+                    return Results.Ok(new
+                    {
+                        roomId,
+                        username,
+                        role,
+                        keyshare
+                    });
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return Results.StatusCode(500);
+                    return Results.Problem(ex.Message);
                 }
-            })
-            .RequireAuthorization();
+            }).RequireAuthorization();
 
             app.Run();
         }
