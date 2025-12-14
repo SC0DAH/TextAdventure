@@ -12,6 +12,7 @@ namespace TextAdventure
         {
             Console.WriteLine("Welcome to the Adventure Game!");
             Console.WriteLine("Type 'help' to see available commands.");
+            Console.WriteLine("Type 'register' to sign up");
 
             var world = GameSetup.CreateGame();
             var inventory = new Inventory();
