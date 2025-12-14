@@ -1,7 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.IO;
+using System.Security.Cryptography;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 class RoomEncryptor
 {
@@ -9,43 +10,45 @@ class RoomEncryptor
     {
         Console.WriteLine("Room Encryptor");
 
-        Console.Write("Enter path to plaintext room file (e.g., room_startroom.txt): ");
-        string inputFile = Console.ReadLine()!.Trim();
+        EncryptRoom("room_startroom.txt", "room_startroom.enc");
+        EncryptRoom("room_keyroom.txt", "room_keyroom.enc");
 
+        Console.WriteLine("Finished.");
+        Console.ReadKey();
+    }
+
+    static void EncryptRoom(string inputFile, string outputFile)
+    {
         if (!File.Exists(inputFile))
         {
-            Console.WriteLine("File does not exist.");
+            Console.WriteLine($"File not found: {inputFile}");
             return;
         }
-
-        Console.Write("Enter output encrypted file path (e.g., room_startroom.enc): ");
-        string outputFile = Console.ReadLine()!.Trim();
 
         try
         {
             byte[] data = File.ReadAllBytes(inputFile);
 
-            // Self-signed certificate (X.509)
             using RSA rsa = RSA.Create(2048);
             var request = new CertificateRequest(
-                "cn=RoomCertificate",
+                "CN=RoomCert",
                 rsa,
                 HashAlgorithmName.SHA256,
-                RSASignaturePadding.Pkcs1);
+                RSASignaturePadding.Pkcs1
+            );
 
-            var certificate = request.CreateSelfSigned(
+            var cert = request.CreateSelfSigned(
                 DateTimeOffset.Now,
-                DateTimeOffset.Now.AddYears(5));
+                DateTimeOffset.Now.AddYears(5)
+            );
 
-            // CMS encryptie
-            ContentInfo contentInfo = new ContentInfo(data);
-            EnvelopedCms cms = new EnvelopedCms(contentInfo);
-            CmsRecipient recipient = new CmsRecipient(certificate);
-            cms.Encrypt(recipient);
+            var content = new ContentInfo(data);
+            var cms = new EnvelopedCms(content);
+            cms.Encrypt(new CmsRecipient(cert));
 
             File.WriteAllBytes(outputFile, cms.Encode());
 
-            Console.WriteLine("Room successfully encrypted!");
+            Console.WriteLine($"Encrypted: {inputFile} -> {outputFile}");
         }
         catch (Exception ex)
         {
