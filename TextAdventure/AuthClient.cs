@@ -1,90 +1,84 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json.Serialization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 public class AuthClient
 {
     private readonly HttpClient _client;
-    private string? _token;
+    private string? _jwt;
 
-    public string? Token => _token;
-    public bool IsLoggedIn => !string.IsNullOrEmpty(_token);
+    public bool IsLoggedIn => !string.IsNullOrEmpty(_jwt);
+    public string? Role { get; private set; }
+    public bool IsAdmin => Role == "Admin";
 
-    public AuthClient(string baseUrl = "http://localhost:5064") // server port http
+    public AuthClient(string baseUrl)
     {
-        _client = new HttpClient();
-        _client.BaseAddress = new Uri(baseUrl);
+        _client = new HttpClient { BaseAddress = new Uri(baseUrl) };
     }
 
-    // registration
     public async Task<bool> RegisterAsync(string username, string password)
     {
-        try
-        {
-            var response = await _client.PostAsJsonAsync("/register", new { Username = username, Password = password });
-            return response.IsSuccessStatusCode;
-        }
-        catch
-        {
-            Console.WriteLine("Network error during registration.");
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             return false;
-        }
+
+        var payload = new { Username = username, Password = password };
+        var res = await _client.PostAsJsonAsync("/auth/register", payload);
+        return res.IsSuccessStatusCode;
     }
 
-    // login
     public async Task<bool> LoginAsync(string username, string password)
     {
-        try
-        {
-            var response = await _client.PostAsJsonAsync("/login", new { Username = username, Password = password });
-            if (!response.IsSuccessStatusCode) return false;
-
-            var json = await response.Content.ReadFromJsonAsync<JsonElement>();
-            if (!json.TryGetProperty("token", out var tokenElement)) return false;
-
-            _token = tokenElement.GetString();
-            return true;
-        }
-        catch
-        {
-            Console.WriteLine("Network error during login.");
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             return false;
-        }
-    }
 
-    // getting keyshare
-    public async Task<string?> GetKeyShareAsync()
-    {
-        if (_token == null)
-        {
-            Console.WriteLine("You must login first.");
-            return null;
-        }
+        var payload = new { Username = username, Password = password };
+        var res = await _client.PostAsJsonAsync("/auth/login", payload);
 
+        if (!res.IsSuccessStatusCode) return false;
+
+        var json = await res.Content.ReadFromJsonAsync<LoginResponse>();
+        if (json == null || string.IsNullOrEmpty(json.Token)) return false;
+
+        _jwt = json.Token;
+        _client.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _jwt);
+
+        // Parse JWT en haal role
         try
         {
-            var req = new HttpRequestMessage(HttpMethod.Get, "/keyshare");
-            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-
-            var resp = await _client.SendAsync(req);
-            if (!resp.IsSuccessStatusCode) return null;
-
-            var json = await resp.Content.ReadFromJsonAsync<JsonElement>();
-            if (!json.TryGetProperty("keyshare", out var keyElement)) return null;
-
-            return keyElement.GetString();
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(json.Token);
+            Role = token.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
         }
         catch
         {
-            Console.WriteLine("Network error during keyshare request.");
-            return null;
+            Role = null;
         }
+
+        return true;
     }
 
-    public void Logout()
+    public async Task<string?> GetKeyShareAsync(string roomId = "room1")
     {
-        _token = null;
+        if (_jwt == null) return null;
+
+        var res = await _client.GetAsync($"/api/keys/keyshare/{roomId}");
+        if (!res.IsSuccessStatusCode) return null;
+
+        var json = await res.Content.ReadFromJsonAsync<KeyShareResponse>();
+        return json?.Keyshare;
+    }
+
+    private class LoginResponse
+    {
+        [JsonPropertyName("token")]
+        public string Token { get; set; } = string.Empty;
+    }
+
+    private class KeyShareResponse
+    {
+        [JsonPropertyName("keyshare")]
+        public string Keyshare { get; set; } = string.Empty;
     }
 }
-
-

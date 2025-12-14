@@ -6,8 +6,6 @@ namespace TextAdventure
     internal class Program
     {
         static string? passphrase = null;
-
-        //  ophalen API (JWT beveiligd)
         static string? keyshare = null;
 
         static async Task Main(string[] args)
@@ -15,10 +13,8 @@ namespace TextAdventure
             Console.WriteLine("Welcome to the Adventure Game!");
             Console.WriteLine("Type 'help' to see available commands.");
 
- 
             var world = GameSetup.CreateGame();
             var inventory = new Inventory();
-
             var auth = new AuthClient("http://localhost:5064");
 
             bool isRunning = true;
@@ -50,36 +46,40 @@ namespace TextAdventure
 
                     case "register":
                         Console.Write("Username: ");
-                        var user = Console.ReadLine()!.Trim();
+                        var regUser = Console.ReadLine()!.Trim();
 
                         Console.Write("Password: ");
-                        var pass = ReadPassword();
+                        var regPass = ReadPassword();
 
-                        var success = await auth.RegisterAsync(user, pass);
-                        if (success)
-                            Console.WriteLine("Registered successfully! Now you can login.");
-                        else
-                            Console.WriteLine("Registration failed. Try a different username.");
+                        if (regPass.Length < 4)
+                        {
+                            Console.WriteLine("Password must be at least 4 characters.");
+                            break;
+                        }
+
+                        var success = await auth.RegisterAsync(regUser, regPass);
+                        Console.WriteLine(success
+                            ? "Registered successfully! Now you can login."
+                            : "Registration failed. Try a different username.");
                         break;
 
-                    // JWT token opgeslagen in AuthClient
                     case "login":
                         Console.Write("Username: ");
-                        var loguser = Console.ReadLine()!.Trim();
+                        var logUser = Console.ReadLine()!.Trim();
 
                         Console.Write("Password: ");
-                        var logpass = ReadPassword();
+                        var logPass = ReadPassword();
 
-                        var loginSuccess = await auth.LoginAsync(loguser, logpass);
-                        if (!loginSuccess)
+                        var loginSuccess = await auth.LoginAsync(logUser, logPass);
+                        if (loginSuccess)
                         {
-                            Console.WriteLine("Login failed. Check your credentials.");
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Login successful!");
+                            Console.ResetColor();
                         }
                         else
                         {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Login succesfull");
-                            Console.ResetColor();
+                            Console.WriteLine("Login failed. Check your credentials.");
                         }
                         break;
 
@@ -98,13 +98,6 @@ namespace TextAdventure
                         }
                         break;
 
-                    // ophalen via API (JWT nodig)
-                    case "keyshare":
-                        keyshare = await auth.GetKeyShareAsync();
-                        if (keyshare != null)
-                            Console.WriteLine("Your secret key received.");
-                        break;
-
                     case "look":
                         DescribeRoom(world);
                         break;
@@ -120,23 +113,25 @@ namespace TextAdventure
                         }
                         else
                         {
-                            if (world.CurrentRoom.Exits.TryGetValue(argument, out var targetRoom)
-                                && (targetRoom.Name == "Key-Room" || targetRoom.Name == "Start-Room"))
+                            if (world.CurrentRoom.Exits.TryGetValue(argument, out var targetRoom))
                             {
-                                if (!TryGenerateDecryptionKey(keyshare, passphrase, out _))
+                                // Mocking encrypted rooms
+                                bool isEncrypted = true;
+                                if (auth.IsAdmin)
                                 {
-                                    Console.WriteLine("The door is encrypted.");
-                                    break;
+                                    Console.WriteLine("Admin: You can enter the room, but the content is encrypted.");
                                 }
 
-                                Console.WriteLine("Decryption successful. The room is now accessible.");
+                                string result = world.Go(argument, inventory);
+                                Console.WriteLine(result);
+
+                                if (result.Contains("Game Over") || result.Contains("Congratulations"))
+                                    isRunning = false;
                             }
-
-                            string result = world.Go(argument, inventory);
-                            Console.WriteLine(result);
-
-                            if (result.Contains("Game Over") || result.Contains("Congratulations"))
-                                isRunning = false;
+                            else
+                            {
+                                Console.WriteLine("You cannot go that way.");
+                            }
                         }
                         break;
 
@@ -147,9 +142,6 @@ namespace TextAdventure
                         else
                         {
                             var item = world.TakeItem(argument, inventory);
-                            Console.WriteLine(item != null
-                                ? $"You picked up {item.Id}."
-                                : "That item isn't here.");
                         }
                         break;
 
@@ -168,32 +160,6 @@ namespace TextAdventure
                 }
             }
         }
-
-        // SHA256( keyshare + ":" + passphrase )
-        static bool TryGenerateDecryptionKey(
-            string? keyshare,
-            string? passphrase,
-            out byte[] derivedKey)
-        {
-            derivedKey = Array.Empty<byte>();
-
-            if (string.IsNullOrWhiteSpace(keyshare) || string.IsNullOrWhiteSpace(passphrase))
-                return false;
-
-            try
-            {
-                var combined = $"{keyshare}:{passphrase}";
-                using var sha = SHA256.Create();
-                derivedKey = sha.ComputeHash(Encoding.UTF8.GetBytes(combined));
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-
         static void ShowHelp()
         {
             Console.WriteLine("Available commands:");
@@ -207,7 +173,6 @@ namespace TextAdventure
             Console.WriteLine("login - login to the server and get your JWT token");
             Console.WriteLine("unlock - enter your passphrase to unlock secured rooms");
             Console.WriteLine("register - create an account");
-            Console.WriteLine("keyshare - request your unique key from the API (requires login)");
         }
 
         static void DescribeRoom(Rooms world)

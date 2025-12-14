@@ -1,2 +1,2 @@
-﻿This room contains the ancient key.
-Only worthy players may enter.
+﻿Key-Room
+The room with a secret key!

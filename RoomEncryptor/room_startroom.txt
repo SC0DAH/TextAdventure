@@ -1,2 +1,2 @@
-﻿This room contains the ancient key.
-Only worthy players may enter.
+﻿Start-Room
+You are at the very beginning of your adventure!
